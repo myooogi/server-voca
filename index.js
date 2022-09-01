@@ -80,6 +80,29 @@ app.get("/voca/:day", (req, res) => {
       res.json(result);
     });
 });
+app.delete("/voca/:id", (req, res) => {
+  //console.log("======", req.params.id);
+  //res.send("delete");
+  //db연결해서 지우기
+  const _id = parseInt(req.params.id);
+  db.collection("vocas").deleteOne({ id: _id }, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json({ delete: "ok" });
+    }
+  });
+});
+app.put("/voca/:id", (req, res) => {
+  console.log("=====", req.params.id);
+  const _id = parseInt(req.params.id);
+  const _isDone = Boolean(req.body.isDone);
+
+  console.log(_isDone);
+  db.collection("vocas").updateOne({ id: _id }, { $set: { isDone: _isDone } }, (err, result) => {
+    res.json({ update: "ok" });
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`${PORT}에서 서버 대기중`);
